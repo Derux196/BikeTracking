@@ -1,0 +1,158 @@
+<app-section-hero
+  eyebrow="Seguimiento personal"
+  title="Mi moto en un vistazo"
+  subtitle="Revisa el estado actual de tu vehiculo, sus datos principales y el historial de cuidado."
+/>
+
+@if (loading) {
+  <p class="text-muted">Cargando...</p>
+} @else if (error) {
+  <section class="row g-3">
+    <div class="col-12">
+      <article class="card border-0 shadow-sm">
+        <div class="card-body">
+          <p class="text-muted mb-0">{{ error }}</p>
+        </div>
+      </article>
+    </div>
+  </section>
+} @else {
+  <section class="row g-3 mb-4 stats-row" id="stats">
+    <div class="col-6 col-md-3">
+      <article class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <p class="text-muted mb-1 small">Mi placa</p>
+          <p class="fs-4 fw-bold text-primary mb-0">
+            {{ primaryMoto?.placa ?? "Sin registro" }}
+          </p>
+        </div>
+      </article>
+    </div>
+    <div class="col-6 col-md-3">
+      <article class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <p class="text-muted mb-1 small">Estado actual</p>
+          <p
+            class="fs-4 fw-bold mb-0"
+            [class.text-success]="primaryMoto?.estado !== 'mantenimiento'"
+            [class.text-warning]="primaryMoto?.estado === 'mantenimiento'"
+          >
+            {{ prettyState(primaryMoto?.estado) }}
+          </p>
+        </div>
+      </article>
+    </div>
+    <div class="col-6 col-md-3">
+      <article class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <p class="text-muted mb-1 small">Servicios guardados</p>
+          <p class="fs-4 fw-bold text-warning mb-0">
+            {{ mantenimientosDeMoto.length }}
+          </p>
+        </div>
+      </article>
+    </div>
+    <div class="col-6 col-md-3">
+      <article class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <p class="text-muted mb-1 small">Ultimo servicio</p>
+          <p class="fs-4 fw-bold text-secondary mb-0">
+            {{ formatDate(mantenimientosDeMoto[0]?.fecha) }}
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="mb-4">
+    @if (!primaryMoto) {
+      <article class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <p class="text-uppercase tracking fw-semibold mb-2 text-muted">
+            Primer paso
+          </p>
+          <h2 class="fs-4 fw-bold mb-2">Todavia no has registrado tu moto</h2>
+          <p class="text-muted mb-0">
+            Crea la ficha de tu vehiculo personal para empezar a registrar
+            revisiones y mantenimientos.
+          </p>
+        </div>
+      </article>
+    } @else {
+      <article class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+          <div class="row g-3 align-items-center">
+            <div class="col-12 col-lg-8">
+              <p class="text-uppercase tracking fw-semibold mb-2 text-muted">
+                Vehiculo principal
+              </p>
+              <h2 class="fs-3 fw-bold mb-2">
+                {{ primaryMoto.marca }} {{ primaryMoto.modelo }}
+              </h2>
+              <p class="text-muted mb-0">
+                Placa {{ primaryMoto.placa }} · {{ primaryMoto.cilindraje }} ·
+                Propietario {{ primaryMoto.propietario }}
+              </p>
+            </div>
+            <div class="col-12 col-lg-4">
+              <div class="rounded-4 p-3 bg-light border">
+                <p class="text-muted mb-1 small">Historial personal</p>
+                <p class="fs-4 fw-bold mb-1">
+                  {{ mantenimientosDeMoto.length }} registros
+                </p>
+                <p class="text-muted small mb-0">
+                  Ultima fecha:
+                  {{ formatDate(mantenimientosDeMoto[0]?.fecha) }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    }
+  </section>
+
+  <section>
+    <h2 class="fs-5 fw-bold mb-3">Mi espacio</h2>
+    <div class="row g-3">
+      <div class="col-12 col-md-6">
+        <a routerLink="/mi-moto" class="text-decoration-none">
+          <article class="card h-100 access-card border-0 shadow-sm">
+            <div class="card-body p-4 d-flex align-items-start gap-3">
+              <div class="access-icon bg-primary bg-opacity-10 text-primary">
+                <i class="bi bi-bicycle fs-3"></i>
+              </div>
+              <div>
+                <h3 class="fs-5 fw-bold mb-1 text-body">Datos de mi moto</h3>
+                <p class="text-muted mb-0 small">
+                  Consulta y actualiza la informacion principal de tu vehiculo
+                  personal.
+                </p>
+              </div>
+            </div>
+          </article>
+        </a>
+      </div>
+      <div class="col-12 col-md-6">
+        <a routerLink="/mantenimiento" class="text-decoration-none">
+          <article class="card h-100 access-card border-0 shadow-sm">
+            <div class="card-body p-4 d-flex align-items-start gap-3">
+              <div class="access-icon bg-warning bg-opacity-10 text-warning">
+                <i class="bi bi-tools fs-3"></i>
+              </div>
+              <div>
+                <h3 class="fs-5 fw-bold mb-1 text-body">
+                  Mantenimiento personal
+                </h3>
+                <p class="text-muted mb-0 small">
+                  Guarda servicios, revisiones y trabajos realizados sobre tu
+                  moto.
+                </p>
+              </div>
+            </div>
+          </article>
+        </a>
+      </div>
+    </div>
+  </section>
+}
