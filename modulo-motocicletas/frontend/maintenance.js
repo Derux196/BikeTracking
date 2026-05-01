@@ -5,6 +5,9 @@ if (!_token) window.location.replace("/login.html");
 const alerta = document.getElementById("alerta");
 const form = document.getElementById("formMantenimiento");
 const motoSelect = document.getElementById("motoId");
+const historialContainer = document.getElementById("historialContainer");
+
+let _motosCache = [];
 
 function notify(type, text) {
   alerta.className = `alert alert-${type}`;
@@ -82,6 +85,7 @@ async function loadMotos() {
     if (res.status === 401) { sessionStorage.clear(); window.location.replace("/login.html"); return; }
     if (!res.ok) throw new Error();
     const motos = await res.json();
+    _motosCache = motos;
 
     if (!motos.length) {
       motoSelect.innerHTML =
@@ -109,6 +113,69 @@ async function loadMotos() {
     });
   } catch {
     notify("warning", "No se pudo cargar la lista de motocicletas.");
+  }
+}
+
+function getMotoPlaca(motoId) {
+  const m = _motosCache.find((x) => x.id === motoId);
+  return m ? m.placa : null;
+}
+
+function formatCOP(value) {
+  return new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(value);
+}
+
+function formatFecha(value) {
+  if (!value) return "-";
+  return new Date(value + "T00:00:00").toLocaleDateString("es-CO", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+async function loadHistorial() {
+  try {
+    const token = sessionStorage.getItem("bt_token");
+    const res = await fetch("/api/mantenimientos", { headers: { "Authorization": `Bearer ${token}` } });
+    if (!res.ok) throw new Error();
+    const items = await res.json();
+
+    if (!items.length) {
+      historialContainer.innerHTML = '<p class="text-muted">No tienes mantenimientos registrados aun.</p>';
+      return;
+    }
+
+    // Ordenar por fecha mas reciente primero
+    items.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+    historialContainer.innerHTML = `
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Fecha</th>
+              <th>Vehiculo</th>
+              <th>Tipo</th>
+              <th>Descripcion</th>
+              <th>Costo</th>
+              <th>Tecnico</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${items.map((m) => {
+              const placa = getMotoPlaca(m.moto_id);
+              return `<tr>
+                <td>${formatFecha(m.fecha)}</td>
+                <td>${placa ? `<span class="badge bg-secondary">${placa}</span>` : '<span class="text-muted small">Desconocido</span>'}</td>
+                <td class="text-capitalize">${m.tipo}</td>
+                <td>${m.descripcion}</td>
+                <td>${formatCOP(m.costo)}</td>
+                <td>${m.tecnico}</td>
+              </tr>`;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
+  } catch {
+    historialContainer.innerHTML = '<p class="text-muted text-danger">No se pudo cargar el historial.</p>';
   }
 }
 
@@ -143,6 +210,7 @@ form.addEventListener("submit", async (e) => {
     notify("success", "Mantenimiento registrado correctamente.");
     form.reset();
     clearValidation();
+    loadHistorial();
   } catch {
     notify("danger", "No se pudo conectar con el servidor.");
   }
@@ -153,7 +221,7 @@ document.getElementById("btnLimpiar").addEventListener("click", () => {
   clearValidation();
 });
 
-loadMotos();
+loadMotos().then(() => loadHistorial());
 
 // Logout
 document.getElementById("btnLogout")?.addEventListener("click", async () => {
