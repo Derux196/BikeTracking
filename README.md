@@ -1,136 +1,120 @@
-# BikeTracking
+# BikeTracking - Sistema de Gestión de Motocicletas
 
-Sistema integrado de seguimiento y gestión de motocicletas personales con autenticación de usuarios y registro de mantenimientos.
+**BikeTracking** es una aplicación web moderna desarrollada con Angular y NestJS, diseñada para ayudar a los motociclistas a gestionar el mantenimiento de sus vehículos de manera eficiente.
 
----
+## 🚀 Características Principales
 
-## Módulos
+- **Gestión de Motocicletas**: Registro, edición y eliminación de motocicletas con detalles como placa, marca, modelo, año, cilindraje, estado y propietario.
+- **Registro de Mantenimientos**: Control detallado de servicios de mantenimiento, incluyendo tipo, descripción, fecha, costo y técnico responsable.
+- **Dashboard Interactivo**: Visualización clara del estado actual de la motocicleta y próximos mantenimientos sugeridos.
+- **Diseño Moderno**: Interfaz de usuario intuitiva y responsive desarrollada con Tailwind CSS.
 
-### Módulo Motocicletas ✅ Completado
-
-**Estado:** Completamente funcional con autenticación.
-
-Permite a cada usuario:
-- 📝 Registrar su motocicleta con datos básicos (placa, marca, modelo, año, cilindraje, etc.)
-- 🔍 Consultar el estado actual del vehículo
-- 🔧 Llevar un historial detallado de mantenimientos y servicios
-- 👤 Acceso seguro con autenticación por usuario/contraseña
-
-**Ubicación:** `modulo-motocicletas/`
-
----
-
-## Avances (30 de abril de 2026)
-
-### Sincronización de repositorio
-- ✅ Conectado el remoto upstream a `ThomasJuti/BikeTracking`
-- ✅ Actualizado `main` local con cambios del equipo (66 archivos, +21,762 líneas)
-- ✅ Publicados cambios a `origin/main`
-
-### Sistema de autenticación
-- ✅ **Backend:** Endpoints de registro, login y logout
-- ✅ **Seguridad:** Contraseñas hasheadas con scrypt + salt aleatorio
-- ✅ **Tokens:** Sistema de sesiones con tokens aleatorios de 32 bytes
-- ✅ **Protección de rutas:** Todos los endpoints de la API requieren autenticación (401 si no hay token válido)
+## 🛠️ Tecnologías Utilizadas
 
 ### Frontend
-- ✅ **Nueva página de login:** `login.html` y `login.js`
-  - Dos tabs: "Iniciar sesión" y "Registrarse"
-  - Validación de campos (usuario mín. 3 caracteres, contraseña mín. 6 caracteres)
-  - Mensajes de error y éxito contextualizados
+- **Framework**: Angular 21
+- **Lenguaje**: TypeScript
+- **Estilos**: Tailwind CSS
+- **Arquitectura**: Standalone Components
 
-- ✅ **Guards de autenticación:** Redireccionan a `/login.html` si no hay sesión
-  - Implementados en `app.js`, `home.js`, `maintenance.js`
+### Backend
+- **Framework**: NestJS
+- **Lenguaje**: TypeScript
+- **Base de Datos**: PostgreSQL
+- **ORM**: Prisma
 
-- ✅ **Botones de logout:** Agregados en todas las vistas protegidas
-  - Disponibles en `home.html`, `index.html`, `maintenance.html`
-
-- ✅ **Headers con autorización:** Todos los fetch incluyen `Authorization: Bearer <token>`
-
-### Validación del flujo completo
-- ✅ Endpoint sin token devuelve 401
-- ✅ Registro de nuevo usuario correcto
-- ✅ Login devuelve token válido
-- ✅ API responde correctamente con token en header
-
----
-
-## Estructura de carpetas
+## 📂 Estructura del Proyecto
 
 ```
 BikeTracking/
-├── modulo-motocicletas/
-│   ├── backend/
-│   │   ├── server.js              # API REST con Express
-│   │   ├── package.json
-│   │   └── data/
-│   │       ├── motos.json         # Almacenamiento de motos
-│   │       ├── mantenimientos.json
-│   │       └── users.json         # Usuarios (contraseñas hasheadas)
-│   ├── frontend/
-│   │   ├── login.html             # Pantalla de acceso
-│   │   ├── login.js
-│   │   ├── home.html              # Dashboard
-│   │   ├── home.js
-│   │   ├── index.html             # Ficha de la moto
-│   │   ├── app.js
-│   │   ├── maintenance.html       # Mantenimiento
-│   │   ├── maintenance.js
-│   │   └── styles.css
-│   └── README.md                  # Documentación detallada del módulo
-├── Backend/                       # Backend principal (NestJS)
-├── Frontend/                      # Frontend principal (Angular)
-└── README.md                      # Este archivo
+├── Backend/              # API REST con NestJS
+│   ├── src/
+│   │   ├── motos/        # Módulo de motocicletas
+│   │   ├── mantenimientos/ # Módulo de mantenimientos
+│   │   └── ...
+│   └── package.json
+│
+└── Frontend/             # Aplicación web con Angular
+    ├── src/
+    │   ├── app/
+    │   │   ├── modules/
+    │   │   │   └── motocicletas/
+    │   │   │       ├── pages/
+    │   │   │       │   ├── mi-moto/          # Gestión de la motocicleta
+    │   │   │       │   └── mantenimiento/    # Registro de mantenimientos
+    │   │   │       └── components/         # Componentes reutilizables
+    │   │   └── ...
+    │   └── ...
+    └── package.json
 ```
+
+## 🚀 Instalación y Ejecución
+
+### Requisitos Previos
+- Node.js (v18 o superior)
+- npm
+- PostgreSQL (opcional, se puede usar SQLite para desarrollo)
+
+### 1. Backend
+
+```bash
+# Navegar al directorio del backend
+cd Backend
+
+# Instalar dependencias
+npm install
+
+# Crear base de datos (si usas PostgreSQL)
+npx prisma migrate dev --name init
+
+# Ejecutar la aplicación
+npm run start:dev
+```
+
+### 2. Frontend
+
+```bash
+# Navegar al directorio del frontend
+cd Frontend
+
+# Instalar dependencias
+npm install
+
+# Ejecutar la aplicación
+npm run start
+```
+
+La aplicación estará disponible en `http://localhost:4200`.
+
+## 📝 Notas de Desarrollo
+
+- El backend expone endpoints en `/api/motos` y `/api/mantenimientos`.
+- El frontend se comunica con el backend a través de `http://localhost:3000/api`.
+- Se ha implementado un sistema de validación de datos en ambos lados para asegurar la integridad de la información.
 
 ---
 
-## Cómo ejecutar el módulo motocicletas
+## 📌 Módulo Motocicletas (Express + Vanilla JS)
 
+Módulo independiente con autenticación completa. Ubicado en `modulo-motocicletas/`.
+
+### ✅ Lo que incluye
+- Sistema de autenticación: registro, login, logout
+- Contraseñas hasheadas con **scrypt + salt** (Node.js crypto nativo)
+- Tokens de sesión seguros de 32 bytes
+- Todas las rutas de la API protegidas con `Authorization: Bearer <token>`
+- Frontend con página de login, guards en todas las vistas y botones de logout
+
+### 🚀 Cómo ejecutar el módulo
 ```bash
 cd modulo-motocicletas/backend
 npm install
 npm run start
 ```
+Accede en **http://localhost:3000** → redirige automáticamente a `/login.html`
 
-Accede en **http://localhost:3000**
-
----
-
-## API - Endpoints principales
-
-### Autenticación
-- `POST /api/auth/register` — Registrar nuevo usuario
-- `POST /api/auth/login` — Iniciar sesión, devuelve token
-- `POST /api/auth/logout` — Cerrar sesión
-
-### Motocicletas (requieren token)
-- `GET /api/motos` — Listar motos del usuario
-- `POST /api/motos` — Registrar nueva moto
-- `PUT /api/motos/:id` — Actualizar datos de la moto
-- `DELETE /api/motos/:id` — Eliminar moto
-
-### Mantenimientos (requieren token)
-- `GET /api/mantenimientos` — Listar mantenimientos
-- `POST /api/mantenimientos` — Registrar nuevo mantenimiento
-
-Consulta `modulo-motocicletas/README.md` para documentación completa de endpoints, campos, ejemplos y detalles técnicos de seguridad.
+Ver `modulo-motocicletas/README.md` para documentación completa de endpoints.
 
 ---
 
-## Commits relevantes
-
-| Hash | Rama | Descripción |
-|------|------|-------------|
-| `3d96047` | modulo-motocicletas | Agrega autenticacion y documentacion al modulo motocicletas |
-| `70183e2` | modulo-motocicletas | Estructura correcta del módulo motocicletas |
-| `6c481b6` | main | README (sincronizado con upstream) |
-
----
-
-## Notas
-
-- El módulo motocicletas es **independiente** y puede ejecutarse por separado.
-- La autenticación está **completamente implementada** en backend y frontend.
-- Los datos persisten en archivos JSON (`data/`); se pueden migrar a base de datos en el futuro.
-- Las sesiones se guardan **en memoria**; al reiniciar el servidor, los tokens anteriores se invalidan (los usuarios siguen existiendo).
+**¡Gracias por usar BikeTracking!** 
