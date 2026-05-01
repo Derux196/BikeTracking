@@ -35,10 +35,10 @@ export class MantenimientoPageComponent implements OnInit {
   form = this.fb.nonNullable.group({
     moto_id: ['', Validators.required],
     tipo: ['', Validators.required],
-    descripcion: ['', Validators.required],
+    descripcion: ['', [Validators.required, Validators.minLength(3)]],
     fecha: ['', Validators.required],
-    costo: [0 as number, [Validators.required, Validators.min(0)]],
-    tecnico: ['', Validators.required],
+    costo: [0 as number, [Validators.required, Validators.min(0), Validators.max(999999)]],
+    tecnico: ['', [Validators.required, Validators.minLength(2)]],
   });
 
   ngOnInit(): void {

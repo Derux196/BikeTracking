@@ -1,6 +1,8 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { forkJoin } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { SectionHeroComponent } from '../../components/section-hero/section-hero';
 import { Mantenimiento } from '../../models/mantenimiento.model';
 import { Moto } from '../../models/moto.model';
@@ -15,6 +17,8 @@ import { MotocicletasApiService } from '../../services/motocicletas-api.service'
 export class HomeDashboardPageComponent implements OnInit {
   private readonly api = inject(MotocicletasApiService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   loading = true;
   error = '';
@@ -22,6 +26,23 @@ export class HomeDashboardPageComponent implements OnInit {
   mantenimientosDeMoto: Mantenimiento[] = [];
 
   ngOnInit(): void {
+    this.loadDashboardData();
+
+    this.router.events
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd,
+        ),
+        filter((event) => event.urlAfterRedirects.includes('/inicio')),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => this.loadDashboardData());
+  }
+
+  private loadDashboardData(): void {
+    this.loading = true;
+    this.error = '';
+
     forkJoin({
       motos: this.api.listMotos(),
       mantenimientos: this.api.listMantenimientos(),

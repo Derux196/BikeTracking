@@ -172,18 +172,46 @@
                 class="form-control"
                 maxlength="10"
                 formControlName="placa"
+                [class.is-invalid]="form.controls.placa.touched && form.controls.placa.invalid"
               />
+              <div class="invalid-feedback">
+                @if (form.controls.placa.errors?.['required']) {
+                  La placa es obligatoria.
+                } @else if (form.controls.placa.errors?.['minlength']) {
+                  La placa debe tener al menos 2 caracteres.
+                }
+              </div>
             </div>
             <div class="col-md-4">
               <label for="marca" class="form-label">Marca</label>
-              <input id="marca" class="form-control" formControlName="marca" />
+              <input
+                id="marca"
+                class="form-control"
+                formControlName="marca"
+                [class.is-invalid]="form.controls.marca.touched && form.controls.marca.invalid"
+              />
+              <div class="invalid-feedback">
+                @if (form.controls.marca.errors?.['required']) {
+                  La marca es obligatoria.
+                } @else if (form.controls.marca.errors?.['minlength']) {
+                  La marca debe tener al menos 2 caracteres.
+                }
+              </div>
             </div>
             <div class="col-md-4">
               <label for="modelo" class="form-label">Modelo</label>
-              <input id="modelo" class="form-control" formControlName="modelo" />
+              <input
+                id="modelo"
+                class="form-control"
+                formControlName="modelo"
+                [class.is-invalid]="form.controls.modelo.touched && form.controls.modelo.invalid"
+              />
+              <div class="invalid-feedback">
+                El modelo es obligatorio.
+              </div>
             </div>
             <div class="col-md-4">
-              <label for="anio" class="form-label">Anio</label>
+              <label for="anio" class="form-label">Año</label>
               <input
                 id="anio"
                 type="number"
@@ -191,7 +219,17 @@
                 formControlName="anio"
                 min="1900"
                 [max]="maxYear"
+                [class.is-invalid]="form.controls.anio.touched && form.controls.anio.invalid"
               />
+              <div class="invalid-feedback">
+                @if (form.controls.anio.errors?.['required']) {
+                  El año es obligatorio.
+                } @else if (form.controls.anio.errors?.['min']) {
+                  El año debe ser 1900 o posterior.
+                } @else if (form.controls.anio.errors?.['max']) {
+                  El año no puede superar {{ maxYear }}.
+                }
+              </div>
             </div>
             <div class="col-md-4">
               <label for="cilindraje" class="form-label">Cilindraje</label>
@@ -200,7 +238,15 @@
                 class="form-control"
                 placeholder="Ej. 150cc"
                 formControlName="cilindraje"
+                [class.is-invalid]="form.controls.cilindraje.touched && form.controls.cilindraje.invalid"
               />
+              <div class="invalid-feedback">
+                @if (form.controls.cilindraje.errors?.['required']) {
+                  El cilindraje es obligatorio.
+                } @else if (form.controls.cilindraje.errors?.['pattern']) {
+                  Debe ser un número mayor a 0 (ej. 150 o 150cc).
+                }
+              </div>
             </div>
             <div class="col-md-4">
               <label for="estado" class="form-label">Estado</label>
@@ -216,7 +262,15 @@
                 id="propietario"
                 class="form-control"
                 formControlName="propietario"
+                [class.is-invalid]="form.controls.propietario.touched && form.controls.propietario.invalid"
               />
+              <div class="invalid-feedback">
+                @if (form.controls.propietario.errors?.['required']) {
+                  El propietario es obligatorio.
+                } @else if (form.controls.propietario.errors?.['minlength']) {
+                  El nombre debe tener al menos 2 caracteres.
+                }
+              </div>
             </div>
           </div>
         </div>

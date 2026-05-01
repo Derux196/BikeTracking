@@ -45,16 +45,16 @@ export class MiMotoPageComponent implements OnInit {
 
   form = this.fb.nonNullable.group({
     id: [''],
-    placa: ['', Validators.required],
-    marca: ['', Validators.required],
-    modelo: ['', Validators.required],
+    placa: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(10)]],
+    marca: ['', [Validators.required, Validators.minLength(2)]],
+    modelo: ['', [Validators.required, Validators.minLength(1)]],
     anio: [
       new Date().getFullYear(),
       [Validators.required, Validators.min(1900), Validators.max(this.maxYear)],
     ],
-    cilindraje: ['', Validators.required],
+    cilindraje: ['', [Validators.required, Validators.pattern(/^[1-9]\d*(?:\s*cc)?$/i)]],
     estado: ['activa', Validators.required],
-    propietario: ['', Validators.required],
+    propietario: ['', [Validators.required, Validators.minLength(2)]],
   });
 
   ngOnInit(): void {

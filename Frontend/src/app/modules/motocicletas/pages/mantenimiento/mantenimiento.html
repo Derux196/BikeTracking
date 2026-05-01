@@ -1,8 +1,5 @@
-<app-section-hero
-  eyebrow="Cuidado personal"
-  title="Mantenimiento de mi moto"
-  subtitle="Guarda servicios, revisiones y arreglos realizados a tu vehiculo personal."
->
+<app-section-hero eyebrow="Cuidado personal" title="Mantenimiento de mi moto"
+  subtitle="Guarda servicios, revisiones y arreglos realizados a tu vehiculo personal.">
   <div class="d-flex justify-content-md-end mt-3 mt-md-0">
     <a routerLink="/inicio" class="btn btn-outline-secondary">
       <i class="bi bi-chevron-left"></i>
@@ -13,14 +10,8 @@
 
 <section class="card mb-4">
   <div class="card-body p-4 p-md-5">
-    <div
-      class="alert"
-      role="alert"
-      [class.d-none]="!alertText"
-      [class.alert-success]="alertType === 'success'"
-      [class.alert-danger]="alertType === 'danger'"
-      [class.alert-warning]="alertType === 'warning'"
-    >
+    <div class="alert" role="alert" [class.d-none]="!alertText" [class.alert-success]="alertType === 'success'"
+      [class.alert-danger]="alertType === 'danger'" [class.alert-warning]="alertType === 'warning'">
       {{ alertText }}
     </div>
 
@@ -28,42 +19,30 @@
       <div class="row g-3">
         <div class="col-12 col-md-6">
           <label for="motoId" class="form-label fw-semibold">Mi moto</label>
-          <select
-            id="motoId"
-            class="form-select"
-            formControlName="moto_id"
-            [class.is-invalid]="
+          <select id="motoId" class="form-select" formControlName="moto_id" [class.is-invalid]="
               form.controls.moto_id.touched && form.controls.moto_id.invalid
-            "
-          >
+            ">
             <option value="">
               {{
-                !motos.length
-                  ? "Primero registra tu moto personal"
-                  : "Selecciona tu moto..."
+              !motos.length
+              ? "Primero registra tu moto personal"
+              : "Selecciona tu moto..."
               }}
             </option>
             @for (m of motos; track m.id) {
-              <option [value]="m.id">
-                {{ m.placa }} — {{ m.marca }} {{ m.modelo }} ({{ m.propietario }})
-              </option>
+            <option [value]="m.id">
+              {{ m.placa }} — {{ m.marca }} {{ m.modelo }} ({{ m.propietario }})
+            </option>
             }
           </select>
           <div class="invalid-feedback">Debes seleccionar tu motocicleta.</div>
         </div>
 
         <div class="col-12 col-md-6">
-          <label for="tipo" class="form-label fw-semibold"
-            >Tipo de mantenimiento</label
-          >
-          <select
-            id="tipo"
-            class="form-select"
-            formControlName="tipo"
-            [class.is-invalid]="
+          <label for="tipo" class="form-label fw-semibold">Tipo de mantenimiento</label>
+          <select id="tipo" class="form-select" formControlName="tipo" [class.is-invalid]="
               form.controls.tipo.touched && form.controls.tipo.invalid
-            "
-          >
+            ">
             <option value="">Selecciona un tipo...</option>
             <option value="preventivo">Preventivo</option>
             <option value="correctivo">Correctivo</option>
@@ -75,73 +54,59 @@
         </div>
 
         <div class="col-12">
-          <label for="descripcion" class="form-label fw-semibold"
-            >Descripcion</label
-          >
-          <textarea
-            id="descripcion"
-            class="form-control"
-            rows="3"
-            placeholder="Describe el trabajo realizado..."
-            formControlName="descripcion"
-            [class.is-invalid]="
+          <label for="descripcion" class="form-label fw-semibold">Descripcion</label>
+          <textarea id="descripcion" class="form-control" rows="3" placeholder="Describe el trabajo realizado..."
+            formControlName="descripcion" [class.is-invalid]="
               form.controls.descripcion.touched &&
               form.controls.descripcion.invalid
-            "
-          ></textarea>
-          <div class="invalid-feedback">La descripcion es obligatoria.</div>
-        </div>
-
-        <div class="col-12 col-md-4">
-          <label for="fecha" class="form-label fw-semibold">Fecha</label>
-          <input
-            id="fecha"
-            type="date"
-            class="form-control"
-            formControlName="fecha"
-            [max]="todayIso"
-            [class.is-invalid]="
-              form.controls.fecha.touched && form.controls.fecha.invalid
-            "
-          />
-          <div class="invalid-feedback">La fecha es obligatoria.</div>
-        </div>
-
-        <div class="col-12 col-md-4">
-          <label for="costo" class="form-label fw-semibold">Costo (USD)</label>
-          <input
-            id="costo"
-            type="number"
-            min="0"
-            step="0.01"
-            class="form-control"
-            placeholder="0.00"
-            formControlName="costo"
-            [class.is-invalid]="
-              form.controls.costo.touched && form.controls.costo.invalid
-            "
-          />
+            "></textarea>
           <div class="invalid-feedback">
-            El costo debe ser un numero igual o mayor a 0.
+            @if (form.controls.descripcion.errors?.['required']) {
+            La descripción es obligatoria.
+            } @else if (form.controls.descripcion.errors?.['minlength']) {
+            La descripción debe tener al menos 3 caracteres.
+            }
           </div>
         </div>
 
         <div class="col-12 col-md-4">
-          <label for="tecnico" class="form-label fw-semibold"
-            >Tecnico responsable</label
-          >
-          <input
-            id="tecnico"
-            type="text"
-            class="form-control"
-            placeholder="Nombre del tecnico"
-            formControlName="tecnico"
+          <label for="fecha" class="form-label fw-semibold">Fecha</label>
+          <input id="fecha" type="date" class="form-control" formControlName="fecha" [max]="todayIso"
             [class.is-invalid]="
-              form.controls.tecnico.touched && form.controls.tecnico.invalid
-            "
-          />
+              form.controls.fecha.touched && form.controls.fecha.invalid
+            " />
+          <div class="invalid-feedback">La fecha es obligatoria.</div>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label for="costo" class="form-label fw-semibold">Costo </label>
+          <input id="costo" type="number" min="0" step="0.01" class="form-control" placeholder="0.00"
+            formControlName="costo" [class.is-invalid]="
+              form.controls.costo.touched && form.controls.costo.invalid
+            " />
           <div class="invalid-feedback">
-            El nombre del tecnico es obligatorio.
+            @if (form.controls.costo.errors?.['required']) {
+            El costo es obligatorio.
+            } @else if (form.controls.costo.errors?.['min']) {
+            El costo no puede ser negativo.
+            } @else if (form.controls.costo.errors?.['max']) {
+            El costo no puede superar $999,999.
+            }
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label for="tecnico" class="form-label fw-semibold">Tecnico responsable</label>
+          <input id="tecnico" type="text" class="form-control" placeholder="Nombre del tecnico"
+            formControlName="tecnico" [class.is-invalid]="
+              form.controls.tecnico.touched && form.controls.tecnico.invalid
+            " />
+          <div class="invalid-feedback">
+            @if (form.controls.tecnico.errors?.['required']) {
+            El nombre del técnico es obligatorio.
+            } @else if (form.controls.tecnico.errors?.['minlength']) {
+            El nombre debe tener al menos 2 caracteres.
+            }
           </div>
         </div>
       </div>
@@ -151,11 +116,7 @@
           <i class="bi bi-arrow-counterclockwise"></i>
           Limpiar
         </button>
-        <button
-          type="submit"
-          class="btn btn-primary"
-          [disabled]="form.invalid || !motos.length"
-        >
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || !motos.length">
           <i class="bi bi-floppy2"></i>
           Guardar
         </button>
@@ -168,41 +129,40 @@
   <div class="card-body p-4 p-md-5">
     <h3 class="fs-3 fw-bold mb-4 text-white">Historial de mantenimientos</h3>
     @if (!mantenimientos.length) {
-      <p class="text-muted">No tienes mantenimientos registrados aun.</p>
+    <p class="text-muted">No tienes mantenimientos registrados aun.</p>
     } @else {
-      <div class="table-responsive">
-        <table class="table align-middle">
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Vehiculo</th>
-              <th>Tipo</th>
-              <th>Descripcion</th>
-              <th>Costo</th>
-              <th>Tecnico</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (m of mantenimientos; track m.id) {
-              <tr>
-                <td>{{ m.fecha | date:'mediumDate' }}</td>
-                <td>
-                  @if (getMotoPlaca(m.moto_id)) {
-                    <span class="badge bg-secondary">{{ getMotoPlaca(m.moto_id) }}</span>
-                  } @else {
-                    <span class="text-muted small">Desconocido</span>
-                  }
-                </td>
-                <td class="text-capitalize">{{ m.tipo }}</td>
-                <td>{{ m.descripcion }}</td>
-                <td>{{ m.costo | currency:'USD' }}</td>
-                <td>{{ m.tecnico }}</td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Vehiculo</th>
+            <th>Tipo</th>
+            <th>Descripcion</th>
+            <th>Costo</th>
+            <th>Tecnico</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (m of mantenimientos; track m.id) {
+          <tr>
+            <td>{{ m.fecha | date:'mediumDate' }}</td>
+            <td>
+              @if (getMotoPlaca(m.moto_id)) {
+              <span class="badge bg-secondary">{{ getMotoPlaca(m.moto_id) }}</span>
+              } @else {
+              <span class="text-muted small">Desconocido</span>
+              }
+            </td>
+            <td class="text-capitalize">{{ m.tipo }}</td>
+            <td>{{ m.descripcion }}</td>
+            <td>{{ m.costo | currency:'USD' }}</td>
+            <td>{{ m.tecnico }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
     }
   </div>
 </section>
-

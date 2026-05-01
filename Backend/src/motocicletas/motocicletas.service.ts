@@ -101,6 +101,31 @@ export class MotocicletasService {
       errors.push('El anio debe ser un numero valido.');
     }
 
+    const cilindrajeStr = this.normalize(payload.cilindraje);
+    if (cilindrajeStr) {
+      const ccMatch = cilindrajeStr.match(/^(-?\d+)/);
+      if (ccMatch) {
+        const num = parseInt(ccMatch[1], 10);
+        if (num <= 0) {
+          errors.push('El cilindraje no puede ser negativo ni cero.');
+        }
+      }
+    }
+
+    // Validaciones de longitud mínima
+    const placaVal = this.normalize(payload.placa);
+    if (placaVal && placaVal.length < 2) {
+      errors.push('La placa debe tener al menos 2 caracteres.');
+    }
+    const marcaVal = this.normalize(payload.marca);
+    if (marcaVal && marcaVal.length < 2) {
+      errors.push('La marca debe tener al menos 2 caracteres.');
+    }
+    const propietarioVal = this.normalize(payload.propietario);
+    if (propietarioVal && propietarioVal.length < 2) {
+      errors.push('El propietario debe tener al menos 2 caracteres.');
+    }
+
     const estadosPermitidos = ['activa', 'mantenimiento', 'inactiva'];
     const estado = this.normalize(payload.estado).toLowerCase();
     if (estado && !estadosPermitidos.includes(estado)) {
@@ -335,6 +360,16 @@ export class MotocicletasService {
       errors.push('El tipo debe ser preventivo, correctivo o revision.');
     }
 
+    // Validaciones de longitud mínima
+    const descripcionVal = this.normalize(payload.descripcion);
+    if (descripcionVal && descripcionVal.length < 3) {
+      errors.push('La descripcion debe tener al menos 3 caracteres.');
+    }
+    const tecnicoVal = this.normalize(payload.tecnico);
+    if (tecnicoVal && tecnicoVal.length < 2) {
+      errors.push('El nombre del tecnico debe tener al menos 2 caracteres.');
+    }
+
     if (payload.fecha) {
       const fecha = new Date(String(payload.fecha) + 'T00:00:00');
       const today = new Date();
@@ -349,6 +384,8 @@ export class MotocicletasService {
     const costo = Number(payload.costo);
     if (isNaN(costo) || costo < 0) {
       errors.push('El costo debe ser un numero igual o mayor a 0.');
+    } else if (costo > 999999) {
+      errors.push('El costo no puede superar 999999.');
     }
 
     if (errors.length) {
