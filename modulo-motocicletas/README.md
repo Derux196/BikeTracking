@@ -158,7 +158,7 @@ Ejemplo de body para registrar un mantenimiento:
   "tipo": "preventivo",
   "descripcion": "Cambio de aceite y revision general",
   "fecha": "2026-04-30",
-  "costo": 45,
+  "costo": 85000,
   "tecnico": "Carlos Lopez"
 }
 ```
