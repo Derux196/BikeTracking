@@ -137,6 +137,50 @@
                 <label for="propietario" class="form-label">Propietario</label>
                 <input id="propietario" class="form-control" required />
               </div>
+              <div class="col-12">
+                <div class="photo-panel h-100">
+                  <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-3">
+                    <div>
+                      <p class="text-uppercase tracking fw-semibold mb-1">Imagen de la moto</p>
+                      <p class="text-muted mb-0 small">
+                        Puedes tomar una foto, subirla desde tu equipo o usar una referencia visual de modelos populares en Colombia.
+                      </p>
+                    </div>
+                    <button class="btn btn-outline-secondary btn-sm align-self-start" type="button" id="btnClearPhoto">
+                      <i class="bi bi-eraser"></i>
+                      Limpiar imagen
+                    </button>
+                  </div>
+
+                  <div class="row g-3 align-items-start">
+                    <div class="col-12 col-lg-5">
+                      <label for="fotoMoto" class="form-label">Foto propia</label>
+                      <input
+                        id="fotoMoto"
+                        type="file"
+                        class="form-control"
+                        accept="image/png,image/jpeg,image/jpg,image/webp,image/gif"
+                        capture="environment"
+                      />
+                      <div class="form-text">En celular se abre la camara trasera; en computador puedes subir una imagen.</div>
+
+                      <div class="photo-preview-wrap mt-3">
+                        <img id="fotoPreview" class="photo-preview d-none" alt="Vista previa de la moto" />
+                        <div id="fotoEmpty" class="photo-empty-state">
+                          <i class="bi bi-camera fs-2"></i>
+                          <p class="mb-0 mt-2 small">Todavia no has elegido una imagen.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-7">
+                      <label class="form-label">Referencias visuales</label>
+                      <div id="presetGallery" class="preset-gallery"></div>
+                      <div class="form-text">Si no subes foto, el sistema puede mostrar una referencia visual del modelo.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="modal-footer border-0">

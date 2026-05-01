@@ -91,6 +91,15 @@ function normalize(value) {
   return String(value || "").trim();
 }
 
+const IMAGE_PRESET_IDS = [
+  "yamaha-fz25",
+  "bajaj-ns200",
+  "akt-nkd125",
+  "honda-cb125f",
+  "suzuki-gixxer150",
+  "tvs-apache200"
+];
+
 function validateMoto(payload, existingMotos, currentId = null) {
   const errors = [];
   const required = ["placa", "marca", "modelo", "anio", "cilindraje", "estado", "relieve", "propietario"];
@@ -115,6 +124,22 @@ function validateMoto(payload, existingMotos, currentId = null) {
   const relievesPermitidos = ["bajo", "medio", "alto"];
   if (payload.relieve && !relievesPermitidos.includes(payload.relieve)) {
     errors.push("El relieve debe ser bajo, medio o alto.");
+  }
+
+  const foto = normalize(payload.foto);
+  if (foto) {
+    const isImageDataUrl = /^data:image\/(png|jpeg|jpg|webp|gif);base64,/i.test(foto);
+    if (!isImageDataUrl) {
+      errors.push("La foto debe ser una imagen valida en formato PNG, JPG, WEBP o GIF.");
+    }
+    if (foto.length > 2_500_000) {
+      errors.push("La foto es demasiado grande. Usa una imagen de hasta 2 MB.");
+    }
+  }
+
+  const fotoPreset = normalize(payload.fotoPreset);
+  if (fotoPreset && !IMAGE_PRESET_IDS.includes(fotoPreset)) {
+    errors.push("La imagen de referencia seleccionada no es valida.");
   }
 
   const placaInput = normalize(payload.placa).toUpperCase();
@@ -246,6 +271,8 @@ app.post("/api/motos", requireAuth, async (req, res) => {
       cilindraje: normalize(payload.cilindraje),
       estado: normalize(payload.estado).toLowerCase(),
       relieve: normalize(payload.relieve).toLowerCase(),
+      foto: normalize(payload.foto),
+      fotoPreset: normalize(payload.fotoPreset),
       propietario: normalize(payload.propietario),
       fechaRegistro: new Date().toISOString()
     };
@@ -283,6 +310,8 @@ app.put("/api/motos/:id", requireAuth, async (req, res) => {
       cilindraje: normalize(payload.cilindraje),
       estado: normalize(payload.estado).toLowerCase(),
       relieve: normalize(payload.relieve).toLowerCase(),
+      foto: normalize(payload.foto),
+      fotoPreset: normalize(payload.fotoPreset),
       propietario: normalize(payload.propietario)
     };
 

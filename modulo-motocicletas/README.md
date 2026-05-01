@@ -9,6 +9,7 @@ Aplicación web para el seguimiento personal de motocicletas. Este módulo fue c
 - **Autenticación** con registro, login y logout.
 - **Hash seguro de contraseñas** usando `crypto.scryptSync` y comparación con `timingSafeEqual`.
 - **Gestión de motocicletas** con creación, consulta, edición y eliminación.
+- **Foto o referencia visual de la moto** mediante carga de imagen, captura desde cámara o selección de modelos populares en Colombia.
 - **Registro de mantenimientos** con validación de fecha, costo, tipo y técnico responsable.
 - **Dashboard personal** con acceso rápido a las vistas principales.
 - **Tres temas visuales**: Oscuro, Claro y Esmeralda.
@@ -213,6 +214,18 @@ La interfaz incluye tres temas visuales seleccionables desde el encabezado:
 - **Esmeralda**
 
 La selección se guarda en `localStorage`, por lo que el usuario conserva su preferencia entre páginas y recargas.
+
+---
+
+## 📷 Imagen de la motocicleta
+
+En la ficha de la moto el usuario puede:
+
+- subir una imagen desde el equipo,
+- tomar una foto desde el celular con `capture="environment"`,
+- o usar una referencia visual de modelos populares en Colombia cuando no tenga foto propia.
+
+Si no existe foto cargada, el sistema muestra la referencia visual seleccionada del modelo.
 
 ---
 
