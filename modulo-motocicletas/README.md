@@ -131,6 +131,7 @@ Ejemplo de body para crear o editar una moto:
   "anio": 2022,
   "cilindraje": "250cc",
   "estado": "activa",
+  "relieve": "medio",
   "propietario": "Juan Perez"
 }
 ```

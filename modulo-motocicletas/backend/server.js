@@ -93,7 +93,7 @@ function normalize(value) {
 
 function validateMoto(payload, existingMotos, currentId = null) {
   const errors = [];
-  const required = ["placa", "marca", "modelo", "anio", "cilindraje", "estado", "propietario"];
+  const required = ["placa", "marca", "modelo", "anio", "cilindraje", "estado", "relieve", "propietario"];
 
   for (const field of required) {
     if (!normalize(payload[field])) {
@@ -110,6 +110,11 @@ function validateMoto(payload, existingMotos, currentId = null) {
   const estadosPermitidos = ["activa", "mantenimiento", "inactiva"];
   if (payload.estado && !estadosPermitidos.includes(payload.estado)) {
     errors.push("El estado debe ser activa, mantenimiento o inactiva.");
+  }
+
+  const relievesPermitidos = ["bajo", "medio", "alto"];
+  if (payload.relieve && !relievesPermitidos.includes(payload.relieve)) {
+    errors.push("El relieve debe ser bajo, medio o alto.");
   }
 
   const placaInput = normalize(payload.placa).toUpperCase();
@@ -235,6 +240,7 @@ app.post("/api/motos", requireAuth, async (req, res) => {
       anio: Number(payload.anio),
       cilindraje: normalize(payload.cilindraje),
       estado: normalize(payload.estado).toLowerCase(),
+      relieve: normalize(payload.relieve).toLowerCase(),
       propietario: normalize(payload.propietario),
       fechaRegistro: new Date().toISOString()
     };
@@ -271,6 +277,7 @@ app.put("/api/motos/:id", requireAuth, async (req, res) => {
       anio: Number(payload.anio),
       cilindraje: normalize(payload.cilindraje),
       estado: normalize(payload.estado).toLowerCase(),
+      relieve: normalize(payload.relieve).toLowerCase(),
       propietario: normalize(payload.propietario)
     };
 
